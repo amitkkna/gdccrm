@@ -4,12 +4,22 @@
 
 [build.environment]
   NEXT_PUBLIC_SUPABASE_URL = "https://wfieixqmazctqduzkzpd.supabase.co"
-  # NEXT_PUBLIC_SUPABASE_ANON_KEY is set in the Netlify UI
+  NEXT_PUBLIC_SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndmaWVpeHFtYXpjdHFkdXprenBkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDYzMjU2MDIsImV4cCI6MjA2MTkwMTYwMn0.en0v1W9PbfWEU_gY4laZucHT6lsH6RBLCbyciRqU9pU"
+  NODE_VERSION = "18"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
 
+# These redirects ensure that client-side routing works correctly
 [[redirects]]
   from = "/*"
-  to = "/index.html"
+  to = "/.netlify/functions/nextjs-server"
   status = 200
+  force = true
+
+# Special redirect for the API routes
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/nextjs-server"
+  status = 200
+  force = true

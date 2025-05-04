@@ -60,13 +60,49 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [configured]);
 
   const signIn = async (email: string, password: string) => {
-    await supabase.auth.signInWithPassword({ email, password });
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password
+      });
+
+      if (error) {
+        console.error('Sign in error:', error.message);
+        throw error;
+      }
+
+      console.log('Sign in successful:', data);
+
+      // Force a page refresh to ensure the auth state is updated
+      window.location.href = '/dashboard';
+
+      return data;
+    } catch (error) {
+      console.error('Sign in exception:', error);
+      throw error;
+    }
   };
 
   const signOut = async () => {
-    await supabase.auth.signOut();
-    // Force redirect to login page
-    window.location.href = '/login';
+    try {
+      const { error } = await supabase.auth.signOut();
+
+      if (error) {
+        console.error('Sign out error:', error.message);
+        throw error;
+      }
+
+      console.log('Sign out successful');
+
+      // Clear any local storage items
+      localStorage.removeItem('selectedUser');
+
+      // Force redirect to login page
+      window.location.href = '/login';
+    } catch (error) {
+      console.error('Sign out exception:', error);
+      throw error;
+    }
   };
 
   return (
