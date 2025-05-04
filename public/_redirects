@@ -1,0 +1,11 @@
+# Netlify redirects file
+# This file is used by Netlify to handle redirects and rewrites
+
+# Handle Next.js static assets
+/_next/*  /_next/:splat  200
+
+# Handle API routes
+/api/*  /.netlify/functions/server/api/:splat  200
+
+# Handle all other routes - this is critical for client-side routing
+/*  /index.html  200
